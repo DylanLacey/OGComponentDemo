@@ -1,0 +1,59 @@
+@import url("https://use.typekit.net/zqz4jit.css");
+
+:root{
+    --bg-color: rgba(251, 245, 243, 1);
+    --gh-green: rgba(28, 55, 56, 1);
+    --gh-red: rgba(92, 26, 27, 1);
+}
+
+@font-face {
+    font-family: "Celestial";
+    font-style: normal;
+    font-weight: 400;
+    src: url("Celestial-Typeface.otf")
+}
+
+@font-face {
+    font-family: "Celestial";
+    src: url("Celestial-Typeface.otf");
+    unicode-range: U+006B;
+    font-feature-settings: "ss02" on;
+}
+
+body {
+    font-family: 'mrs-eaves', sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    background-color: var(--bg-color);
+    margin: 4em;
+    font-size: large;
+}
+
+.title h1 {
+    color: var(--gh-green);
+    font-size: 5em;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    font-family: 'Celestial';
+    text-align: center;
+    text-decoration: underline;
+}
+
+.title h2 {
+    color: var(--gh-green);
+    font-size: 2.5em;
+    margin-top:0;
+    font-family: 'mrs-eaves';
+    text-align: center;
+}
+
+hr {
+    height: 2px;
+    background-color: var(--gh-red);
+    color: var(--gh-red);
+    margin-bottom: 2em;
+}
+
+.explainer {
+    font-size: x-large;
+}
