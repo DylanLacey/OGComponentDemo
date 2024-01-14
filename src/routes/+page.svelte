@@ -26,4 +26,5 @@
 
 <div>
     <OpenGraphPreview site={`${base}metadataExamples/website`} />
+    <OpenGraphPreview site="https://fishwick.com" alwaysDisplay={true}/>
 </div>

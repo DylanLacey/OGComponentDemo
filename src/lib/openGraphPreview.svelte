@@ -5,11 +5,30 @@
     import { dev } from "$app/environment";
     import * as cheerio from "cheerio";
 
-    export let site: string = "";
+    import defaultImageUrl from "$lib/images/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg"
 
-    let og_metadata: OpenGraphMetaData = {
-         title: null, og_type: null, image_url: null, canonical_url: null 
+    export let site: string = "";
+    export let alwaysDisplay: boolean = true;
+
+    const ensureValidURL = (potentialUrl: string): URL | null => {
+        // If we're in dev mode, make this URL fully qualified
+        const potential_url = (dev && !potentialUrl.startsWith("http"))
+            ? `http://%BASE_URL%${potentialUrl}`
+            : potentialUrl
+
+        try {
+            if (typeof potential_url === "string") {
+                return new URL(potential_url)
+            }
+        } catch (e) { } // Oops, wasn't a URL after all
+
+        return null
     }
+
+    let og_metadata: OpenGraphMetaData = alwaysDisplay
+        ? { title: site, og_type: "webpage", image_url: ensureValidURL(defaultImageUrl), canonical_url: ensureValidURL(site) }
+        : { title: null, og_type: null, image_url: null, canonical_url: null }
+    
 
     let mediaType: string
     let imgPreview: {}
@@ -31,7 +50,7 @@
             if (tag_contents == null) { return null }
 
             // If we're in dev mode, make this URL fully qualified
-            const potential_url = dev
+            const potential_url = (dev && !tag_contents.startsWith("http"))
                 ? `http://${window.location.host}${tag_contents}`
                 : tag_contents
 
