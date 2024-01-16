@@ -2,4 +2,6 @@
     import "../app.css"
 </script>
 
-<slot />
+<div class="content-container">
+    <slot />
+</div>

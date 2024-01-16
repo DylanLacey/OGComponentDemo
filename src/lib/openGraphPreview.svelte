@@ -121,24 +121,29 @@
 
 
 {#if (og_metadata.canonical_url)}
-<div>
+<div class="og_container">
     <a href={og_metadata.canonical_url.toString()}>
         <div class="og_preview">
             {#if (og_metadata.image_url)}
-            <div id="media_preview">
+            <div class="og_media_preview">
                 <img src={og_metadata.image_url.toString()} alt={`Preview Image for ${og_metadata.title}`}/>
             </div>
             {/if}
 
             {#if (og_metadata.title)}
-            <div id="description">
-                <h1>{og_metadata.title}</h1>
-            
-                {#if (og_metadata.description)}
-                    <div>{og_metadata.description}</div>
-                {/if}
-            </div>
+                <div class="og_title og_item">
+                    <h1>{og_metadata.title}</h1>
+                </div>
+            {:else}
+                <div class="og_title og_item og_canonical_title">
+                    <h1>{og_metadata.canonical_url}</h1>
+                </div>
             {/if}
+            
+            {#if (og_metadata.description)}
+                <div class="og_item og_description">{og_metadata.description}</div>
+            {/if}
+
         </div>
     </a>
 </div>
@@ -154,11 +159,6 @@
         text-decoration: none;
     }
 
-    a:hover {
-        text-decoration: none;
-        box-shadow: 50px 50px 50px red;
-    }
-
     a:active {
         text-decoration: none;
     }
@@ -167,32 +167,77 @@
         color: black;
     }
 
-    .og_preview {
-        display: flex;
-        width: 800px;
-        height: 210px;
-
-        border-style: solid;
-        border-color: grey;
-        border-radius: 5px;
-    }
-
     .og_preview:hover {
         box-shadow: 2px 2px 2px grey;
     }
 
-    img {
-        object-fit: cover;
-        height: 210px;
+    .og_container {
+        border-width: 1px;
+        border-style: solid;
+        border-radius: 5px;
+        border-color: grey;
     }
 
-    #media_preview {
-        height: 210px;
-        width: 400px;
+    .og_preview {
+        display: grid;
     }
 
-    #description {
-        margin-left: 8px;
-        margin-right: 4px;
+    .og_title {
+        padding-left: 1em;
+        flex-wrap: wrap;
+    }
+
+    h1 {
+        margin-bottom:0.5em;
+    }
+
+    .og_description {
+        padding: 1em;
+    }
+
+    .og_media_preview {
+        grid-row: span 2;
+    }
+
+    .og_media_preview img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+    }
+
+    @media (max-width:639px) {
+        .og_preview {
+            grid-template-columns: 1;
+        }
+
+        .og_container {
+            max-width: 100%;
+        }
+
+        .og_title {
+            order: 0;
+        }
+
+        .og_media_preview {
+            order: 1;
+        }
+
+        .og_media_preview img {
+            width: 100%;
+        }
+
+        .og_description {
+            order: 1;
+        }
+    }
+
+    @media (min-width:639px) {
+        .og_preview {
+            max-height: 315px;
+            flex-direction: row;
+            justify-content: start;
+            grid-template-columns: 50% 50%;
+            grid-template-rows: 1fr 4fr;
+        }
     }
 </style>
