@@ -1,21 +1,21 @@
 export type OpenGraphCommonMetaData = {
     title: string | null
     og_type: string | null
-    image_url: URL | null
-    canonical_url: URL | null
+    image_url: string | null
+    canonical_url: string | null
 
-    audio_url?: URL
+    audio_url?: string
     determiner?: "a" | "an" | "the" | "" | "auto"
     description?: string
     locale?: string
     locale_alternative?: string
     site_name?: string
-    video_url?: URL
+    video_url?: string
 }
 
 export interface OpenGraphExtraMetadata {
-    url: URL | null;
-    secure_url: URL | null;
+    url: string | null;
+    secure_url: string | null;
     type: string | null;
 }
 
