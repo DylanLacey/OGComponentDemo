@@ -1,11 +1,8 @@
 <script>
-    // import { base } from '$app/paths';
-    // let current_Url = `http://${window.location.host}/metadataExamples/website`
     export let data
 
     // Photo by Valdemar Kostenko on Unsplash: https://unsplash.com/photos/brown-tabby-cat-on-brown-wooden-table-aqBTmo6oUA8
     import image_Url from "$lib/images/valdemar-kostenko-aqBTmo6oUA8-unsplash-og-resize.jpg"
-    // const image_Url = "g"
 </script>
 
 <svelte:head>

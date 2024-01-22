@@ -1,16 +1,8 @@
 <script>
-    import OpenGraphPreview from "$lib/openGraphPreview.svelte";
+    import OpenGraphPreview from "$lib/openGraphPreview/openGraphPreview.svelte";
     import { base } from '$app/paths';
 </script>
 
-<!-- <div class="title">
-    <h1>An OpenGraph Preview Component for SvelteKit</h1>
-    <h2 class="subtitle">Presented by <span class="celestial">The GentleHacker</span></h2>
-</div> -->
-<!-- <div class="title">
-    <h1>The GentleHacker</h1>
-    <h2>Presents</h2>
-</div> -->
 <div class="title">
     <h1>The GentleHacker Presents...</h1>
     <h2>A Link Preview Component (for SvelteKit & Others)</h2>
@@ -25,5 +17,5 @@
 <hr/>
 
 <div>
-    <OpenGraphPreview site={`${base}metadataExamples/website`} />
+    <OpenGraphPreview site={`metadataExamples/website`} />
 </div>

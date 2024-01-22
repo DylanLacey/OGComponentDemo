@@ -1,153 +1,72 @@
 <script lang="ts">
-    import type {OpenGraphMetaData} from "./openGraphPreviewTypes";
-    import { commonMetadataTags, optionalMetadataTags, audio_keys, video_keys, image_keys } from "./openGraphPreviewTypes";
-	import { onMount } from "svelte";
-    import { dev } from "$app/environment";
-    import * as cheerio from "cheerio";
-
+    import { onMount } from "svelte";
     import defaultImageUrl from "$lib/images/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg"
+    import type { OpenGraphMetaData } from "./openGraphPreviewTypes";
 
-    export let site: string = "";
-    export let alwaysDisplay: boolean = true;
-
-    const ensureValidURL = (potentialUrl: string): URL | null => {
-        // If we're in dev mode, make this URL fully qualified
-        const potential_url = (dev && !potentialUrl.startsWith("http"))
-            ? `http://%BASE_URL%${potentialUrl}`
-            : potentialUrl
-
-        try {
-            if (typeof potential_url === "string") {
-                return new URL(potential_url)
-            }
-        } catch (e) { } // Oops, wasn't a URL after all
-
-        return null
+    export let site: string;
+    let ogMetadata: OpenGraphMetaData;
+    
+    let displayMetadata: OpenGraphMetaData = {
+        title: site,
+        canonical_url: site,
+        image_url: defaultImageUrl,
+        og_type: "website"
     }
 
-    let og_metadata: OpenGraphMetaData = alwaysDisplay
-        ? { title: site, og_type: "webpage", image_url: ensureValidURL(defaultImageUrl), canonical_url: ensureValidURL(site) }
-        : { title: null, og_type: null, image_url: null, canonical_url: null }
-    
-
-    let mediaType: string
-    let imgPreview: {}
+    let renderedImageURL: string = defaultImageUrl;
 
     onMount( async () => {
         const request_url = new URL(`http://${window.location.host}/opengraph_proxy`)
         request_url.searchParams.append("site", site)
 
-        const response = await fetch(request_url, {method: "GET"} )
-        const header_data = cheerio.load(await response.text())
+        try {
+            const response = await fetch(request_url, {method: "GET"})
+            ogMetadata = JSON.parse(await response.text())
 
-        const extract_tag = (tag: string): string | null => {
-            let found_tag = header_data(`meta[property="og:${tag}"]`)?.attr('content') || null
-            return found_tag
-        }
+            displayMetadata = ogMetadata
 
-        const extract_url = (tag: string): URL | null => {
-            const tag_contents = extract_tag(tag)
-            if (tag_contents == null) { return null }
+            if (ogMetadata.image_url) {
+                let response = await fetch(ogMetadata.image_url)
 
-            // If we're in dev mode, make this URL fully qualified
-            const potential_url = (dev && !tag_contents.startsWith("http"))
-                ? `http://${window.location.host}${tag_contents}`
-                : tag_contents
-
-            try {
-                if (typeof potential_url === "string") {
-                    return new URL(potential_url)
+                if (response.ok) {
+                    let imageBlog = await response.blob()
+                    console.log("Changing image")
+                    renderedImageURL = URL.createObjectURL(imageBlog)
                 }
-            } catch (e) { }
+            }
 
-            return null
+        } catch (e){
+            console.error(`Couldn't retrieve OpenGraph Metadata for ${request_url}. Most likely, that page doesn't embed any OpenGraph metadata.`)
+            console.error("The error itself was :", e)
         }
+    })
 
-        const extract_optional_properties = (properties: {[propName: string]: string}, prefix: string = "") => {
-            return Object.entries(properties).reduce((md, [key, tag]) => {
-                const prefixed_tag = (prefix) 
-                    ? `${prefix}:${tag}`
-                    : tag
-                
-                if (key.endsWith("url")) {
-                    return {
-                        ...md,
-                        ...(extract_url(prefixed_tag) && {[key]: extract_url(prefixed_tag)})
-                    }
-                } else {
-                    return {
-                        ...md,
-                        ...(extract_tag(prefixed_tag) && {[key]: extract_tag(prefixed_tag)})
-                    }
-                }
-            }, {})
-        }
-
-        og_metadata = {
-            title: extract_tag("title"),
-            og_type: extract_tag("type"),
-            image_url: extract_url("image"),
-            canonical_url: extract_url("url"),
-        }
-
-        og_metadata = {...og_metadata, ...extract_optional_properties(optionalMetadataTags)}
-
-        let mediaMetadata
-        switch(og_metadata.og_type) {
-            case "audio":
-                mediaType = "audioMetadata"
-                mediaMetadata = extract_optional_properties(audio_keys, "audio_data")
-                break;
-            case "image":
-                mediaType = "imageMetadata"
-                mediaMetadata = extract_optional_properties(image_keys, "image_data")
-                break;
-            case "video":
-                mediaType = "video"
-                mediaMetadata = extract_optional_properties(video_keys, "video_data")
-                break;
-            default:
-                break;
-        }
-
-        if (mediaType) {
-            og_metadata = {...og_metadata, [mediaType]: mediaMetadata}
-        }
-
-        if (og_metadata.image_url) imgPreview = {...imgPreview, src: og_metadata.image_url}
-        if (og_metadata.image_url) imgPreview = {...imgPreview, src: og_metadata.image_url}
-    });
 </script>
 
-
-{#if (og_metadata.canonical_url)}
 <div class="og_container">
-    <a href={og_metadata.canonical_url.toString()}>
+    <a href={displayMetadata.canonical_url}>
         <div class="og_preview">
-            {#if (og_metadata.image_url)}
             <div class="og_media_preview">
-                <img src={og_metadata.image_url.toString()} alt={`Preview Image for ${og_metadata.title}`}/>
+                <img src={displayMetadata.image_url} alt={`Preview Image for ${displayMetadata.title}`}/>
             </div>
-            {/if}
 
-            {#if (og_metadata.title)}
+            {#if (displayMetadata.title)}
                 <div class="og_title og_item">
-                    <h1>{og_metadata.title}</h1>
+                    <h1>{displayMetadata.title}</h1>
                 </div>
             {:else}
                 <div class="og_title og_item og_canonical_title">
-                    <h1>{og_metadata.canonical_url}</h1>
+                    <h1>{displayMetadata.canonical_url}</h1>
                 </div>
             {/if}
             
-            {#if (og_metadata.description)}
-                <div class="og_item og_description">{og_metadata.description}</div>
+            {#if (displayMetadata.description)}
+                <div class="og_item og_description">{displayMetadata.description}</div>
             {/if}
 
         </div>
     </a>
 </div>
-{/if}
 
 <style>
     a:link {
