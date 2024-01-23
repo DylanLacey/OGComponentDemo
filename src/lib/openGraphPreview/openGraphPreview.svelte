@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import defaultImageUrl from "$lib/images/hal-gatewood-tZc3vjPCk-Q-unsplash.jpg"
     import type { OpenGraphMetaData } from "./openGraphPreviewTypes";
+    import { fade } from "svelte/transition";
 
     export let site: string;
     let ogMetadata: OpenGraphMetaData;
@@ -16,11 +17,11 @@
     let renderedImageURL: string = defaultImageUrl;
 
     onMount( async () => {
-        const request_url = new URL(`http://${window.location.host}/opengraph_proxy`)
-        request_url.searchParams.append("site", site)
+        // const request_url = new URL(`http://${window.location.host}/opengraph_proxy`)
+        // request_url.searchParams.append("site", site)
 
         try {
-            const response = await fetch(request_url, {method: "GET"})
+            const response = await fetch(`/opengraph_proxy?site=${site}`, {method: "GET"})
             ogMetadata = JSON.parse(await response.text())
 
             displayMetadata = ogMetadata
@@ -47,7 +48,9 @@
     <a href={displayMetadata.canonical_url}>
         <div class="og_preview">
             <div class="og_media_preview">
-                <img src={displayMetadata.image_url} alt={`Preview Image for ${displayMetadata.title}`}/>
+                {#key renderedImageURL}
+                    <img out:fade={{ duration:500}} in:fade={{ delay:600, duration:500 }} src={renderedImageURL} alt={`Preview Image for ${displayMetadata.title}`}/>
+                {/key}
             </div>
 
             {#if (displayMetadata.title)}
