@@ -69,12 +69,12 @@
     font-family: "Celestial";
     font-style: normal;
     font-weight: 400;
-    src: url("Celestial-Typeface.otf")
+    src: url("/fonts/Celestial-Typeface.otf")
 }
 
 @font-face {
     font-family: "Celestial";
-    src: url("Celestial-Typeface.otf");
+    src: url("/fonts/Celestial-Typeface.otf");
     unicode-range: U+006B;
     font-feature-settings: "ss02" on;
 }
