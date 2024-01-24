@@ -17,11 +17,11 @@
     let renderedImageURL: string = defaultImageUrl;
 
     onMount( async () => {
-        // const request_url = new URL(`http://${window.location.host}/opengraph_proxy`)
-        // request_url.searchParams.append("site", site)
-
         try {
-            const response = await fetch(`/opengraph_proxy?site=${site}`, {method: "GET"})
+            const siteAsQueryString = new URLSearchParams()
+            siteAsQueryString.append("site", site)
+
+            const response = await fetch(`/opengraph_proxy?${siteAsQueryString.toString()}`, {method: "GET"})
             ogMetadata = JSON.parse(await response.text())
 
             displayMetadata = ogMetadata
@@ -37,7 +37,7 @@
             }
 
         } catch (e){
-            console.error(`Couldn't retrieve OpenGraph Metadata for ${request_url}. Most likely, that page doesn't embed any OpenGraph metadata.`)
+            console.error(`Couldn't retrieve OpenGraph Metadata for ${site}. Most likely, that page doesn't embed any OpenGraph metadata.`)
             console.error("The error itself was :", e)
         }
     })
