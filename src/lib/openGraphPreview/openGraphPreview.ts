@@ -1,9 +1,6 @@
 import { optionalMetadataTags } from "./openGraphPreviewTypes"
 import type { OpenGraphMetaData } from "./openGraphPreviewTypes";
 
-import { default as stream } from 'node:stream';
-import type { ReadableStream } from 'node:stream/web';
-
 import * as cheerio from "cheerio";
 
 export const fetchAndExtractMetaData = async (metadataSource: string, svelteFetch: typeof fetch = fetch): Promise<OpenGraphMetaData> => {

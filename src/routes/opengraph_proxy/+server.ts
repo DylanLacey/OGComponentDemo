@@ -1,5 +1,4 @@
-import { error, type RequestHandler } from '@sveltejs/kit';
-import { dev } from '$app/environment';
+import type { RequestHandler } from '@sveltejs/kit';
 import { fetchAndExtractMetaData } from "$lib/openGraphPreview/openGraphPreview"
 
 export const GET: RequestHandler = async ( {url, params, fetch} ) => {

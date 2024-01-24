@@ -1,6 +1,5 @@
 <script>
     import OpenGraphPreview from "$lib/openGraphPreview/openGraphPreview.svelte";
-    import { base } from '$app/paths';
 </script>
 
 <div class="title">
