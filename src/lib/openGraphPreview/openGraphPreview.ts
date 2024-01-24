@@ -18,13 +18,13 @@ export const extractOpenGraphMetaData = async (pageContent: string | ArrayBuffer
 
     const extractOptionalProperties = (properties: {[propName: string]: string}, prefix: string = "") => {
         return Object.entries(properties).reduce((md, [key, tag]) => {
-            const prefixed_tag = (prefix) 
+            const prefixedTag = (prefix) 
                 ? `${prefix}:${tag}`
                 : tag
             
             return {
                 ...md,
-                ...(extractTag(prefixed_tag) && {[key]: extractTag(prefixed_tag)})
+                ...(extractTag(prefixedTag) && {[key]: extractTag(prefixedTag)})
             }
         }, {})
     }

@@ -4,28 +4,28 @@ export type OpenGraphMetaData = {
     imageUrl: string | null
     canonicalUrl: string | null
 
-    audio_url?: string
+    audioUrl?: string
     determiner?: "a" | "an" | "the" | "" | "auto"
     description?: string
     locale?: string
-    locale_alternative?: string
-    site_name?: string
-    video_url?: string
+    localeAlternative?: string
+    siteName?: string
+    videoUrl?: string
 }
 
 export const commonMetadataTags = {
     title: "title",
     ogType: "type",
-    image_url: "image",
-    canonical_url: "url"
+    imageUrl: "image",
+    canonicalUrl: "url"
 }
 
 export const optionalMetadataTags = {
-    audio_url: "audio",
+    audioUrl: "audio",
     description: "description",
     determiner: "determiner",
     locale: "locale",
-    locale_alternative: "locale_alternative",
-    site_name: "site_name",
-    video_url: "video"
+    localeAlternatives: "locale_alternative",
+    siteName: "site_name",
+    videoUrl: "video"
 }
