@@ -17,5 +17,5 @@
 <hr/>
 
 <div>
-    <OpenGraphPreview site={`metadataExamples/website`} />
+    <OpenGraphPreview site={`/metadataExamples/website`} />
 </div>

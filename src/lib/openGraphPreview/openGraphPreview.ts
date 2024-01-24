@@ -7,7 +7,7 @@ import type { ReadableStream } from 'node:stream/web';
 import * as cheerio from "cheerio";
 
 export const fetchAndExtractMetaData = async (metadataSource: string, svelteFetch: typeof fetch = fetch): Promise<OpenGraphMetaData> => {
-    const response = await svelteFetch(new URL(metadataSource), {method: "GET"} )
+    const response = await svelteFetch( metadataSource )
     const responseStream = await response.arrayBuffer()
 
     return extractOpenGraphMetaData(responseStream)
