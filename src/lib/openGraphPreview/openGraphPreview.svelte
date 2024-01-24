@@ -9,9 +9,9 @@
     
     let displayMetadata: OpenGraphMetaData = {
         title: site,
-        canonical_url: site,
-        image_url: defaultImageUrl,
-        og_type: "website"
+        canonicalUrl: site,
+        imageUrl: defaultImageUrl,
+        ogType: "website"
     }
 
     let renderedImageURL: string = defaultImageUrl;
@@ -26,8 +26,8 @@
 
             displayMetadata = ogMetadata
 
-            if (ogMetadata.image_url) {
-                let response = await fetch(ogMetadata.image_url)
+            if (ogMetadata.imageUrl) {
+                let response = await fetch(ogMetadata.imageUrl)
 
                 if (response.ok) {
                     let imageBlog = await response.blob()
@@ -45,7 +45,7 @@
 </script>
 
 <div class="og_container">
-    <a href={displayMetadata.canonical_url}>
+    <a href={displayMetadata.canonicalUrl}>
         <div class="og_preview">
             <div class="og_media_preview">
                 {#key renderedImageURL}
@@ -59,7 +59,7 @@
                 </div>
             {:else}
                 <div class="og_title og_item og_canonical_title">
-                    <h1>{displayMetadata.canonical_url}</h1>
+                    <h1>{displayMetadata.canonicalUrl}</h1>
                 </div>
             {/if}
             

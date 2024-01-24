@@ -1,8 +1,8 @@
 export type OpenGraphMetaData = {
     title: string | null
-    og_type: string | null
-    image_url: string | null
-    canonical_url: string | null
+    ogType: string | null
+    imageUrl: string | null
+    canonicalUrl: string | null
 
     audio_url?: string
     determiner?: "a" | "an" | "the" | "" | "auto"
@@ -15,7 +15,7 @@ export type OpenGraphMetaData = {
 
 export const commonMetadataTags = {
     title: "title",
-    og_type: "type",
+    ogType: "type",
     image_url: "image",
     canonical_url: "url"
 }

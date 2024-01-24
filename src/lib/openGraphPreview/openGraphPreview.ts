@@ -12,11 +12,11 @@ export const fetchAndExtractMetaData = async (metadataSource: string, svelteFetc
 
 export const extractOpenGraphMetaData = async (pageContent: string | ArrayBuffer): Promise<OpenGraphMetaData> => {
 
-    const extract_tag = (tag: string): string | null => {
+    const extractTag = (tag: string): string | null => {
         return cheerioAPI(`meta[property="og:${tag}"]`)?.attr('content') || null
     }
 
-    const extract_optional_properties = (properties: {[propName: string]: string}, prefix: string = "") => {
+    const extractOptionalProperties = (properties: {[propName: string]: string}, prefix: string = "") => {
         return Object.entries(properties).reduce((md, [key, tag]) => {
             const prefixed_tag = (prefix) 
                 ? `${prefix}:${tag}`
@@ -24,25 +24,25 @@ export const extractOpenGraphMetaData = async (pageContent: string | ArrayBuffer
             
             return {
                 ...md,
-                ...(extract_tag(prefixed_tag) && {[key]: extract_tag(prefixed_tag)})
+                ...(extractTag(prefixed_tag) && {[key]: extractTag(prefixed_tag)})
             }
         }, {})
     }
 
-    let fullPageContents = (typeof pageContent === 'string') 
+    const fullPageContents = (typeof pageContent === 'string') 
         ? pageContent 
         : Buffer.from(pageContent)
 
     const cheerioAPI = cheerio.load(fullPageContents)
 
-    let og_metadata = {
-        title: extract_tag("title"),
-        og_type: extract_tag("type"),
-        image_url: extract_tag("image"),
-        canonical_url: extract_tag("url"),
+    let ogMetadata = {
+        title: extractTag("title"),
+        ogType: extractTag("type"),
+        imageUrl: extractTag("image"),
+        canonicalUrl: extractTag("url"),
     }
 
-    og_metadata = {...og_metadata, ...extract_optional_properties(optionalMetadataTags)}
+    ogMetadata = {...ogMetadata, ...extractOptionalProperties(optionalMetadataTags)}
 
-    return og_metadata
+    return ogMetadata
 }
